@@ -1,7 +1,7 @@
 package drivers;
 
 import com.codeborne.selenide.WebDriverProvider;
-import config.MobileConfig;
+import config.BrowserstackConfig;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -13,27 +13,27 @@ import java.net.URL;
 
 public class BrowserstackMobileDriver implements WebDriverProvider {
 
-    static MobileConfig config = ConfigFactory.create(MobileConfig.class, System.getProperties());
+    static BrowserstackConfig browserstackConfig = ConfigFactory.create(BrowserstackConfig.class, System.getProperties());
 
     @Override
     public WebDriver createDriver(Capabilities capabilities) {
         MutableCapabilities mutableCapabilities = new MutableCapabilities();
         mutableCapabilities.merge(capabilities);
         // Set your access credentials
-        mutableCapabilities.setCapability("browserstack.user", config.browserstackUser());
-        mutableCapabilities.setCapability("browserstack.key", config.browserstackKey());
+        mutableCapabilities.setCapability("browserstack.user", browserstackConfig.browserstackUser());
+        mutableCapabilities.setCapability("browserstack.key", browserstackConfig.browserstackKey());
 
         // Set URL of the application under test
-        mutableCapabilities.setCapability("app", config.app());
+        mutableCapabilities.setCapability("app", browserstackConfig.app());
 
         // Specify device and os_version for testing
-        mutableCapabilities.setCapability("device", config.device());
-        mutableCapabilities.setCapability("os_version", config.osVersion());
+        mutableCapabilities.setCapability("device", browserstackConfig.device());
+        mutableCapabilities.setCapability("os_version", browserstackConfig.osVersion());
 
         // Set other BrowserStack capabilities
-        mutableCapabilities.setCapability("project", config.project());
-        mutableCapabilities.setCapability("build", config.build());
-        mutableCapabilities.setCapability("name", config.name());
+        mutableCapabilities.setCapability("project", browserstackConfig.project());
+        mutableCapabilities.setCapability("build", browserstackConfig.build());
+        mutableCapabilities.setCapability("name", browserstackConfig.name());
         return new RemoteWebDriver(getBrowserstackUrl(), mutableCapabilities);
     }
 

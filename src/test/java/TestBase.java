@@ -1,8 +1,12 @@
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import config.BrowserstackConfig;
+import config.EmulationConfig;
 import drivers.BrowserstackMobileDriver;
+import drivers.EmulationDriver;
 import helpers.Attach;
 import io.qameta.allure.selenide.AllureSelenide;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +18,20 @@ import static io.qameta.allure.Allure.step;
 
 public class TestBase {
 
+    static BrowserstackConfig browserstackConfig = ConfigFactory.create(BrowserstackConfig.class, System.getProperties());
+    static EmulationConfig emulationConfig = ConfigFactory.create(EmulationConfig.class, System.getProperties());
+
     @BeforeAll
     public static void setup() {
-        Configuration.browser = BrowserstackMobileDriver.class.getName();
+
+       if (browserstackConfig.deviceHost() == "browserstack") {
+            Configuration.browser = BrowserstackMobileDriver.class.getName();
+        }
+
+        if (emulationConfig.deviceHost() == "emulation") {
+            Configuration.browser = EmulationDriver.class.getName();
+        }
+
         Configuration.browserSize = null;
     }
 
