@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.Objects;
+
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 import static helpers.Attach.sessionId;
@@ -24,16 +26,23 @@ public class TestBase {
     @BeforeAll
     public static void setup() {
 
-       if (browserstackConfig.deviceHost() == "browserstack") {
-            Configuration.browser = BrowserstackMobileDriver.class.getName();
-        }
+        String deviceHost = System.getProperty("deviceHost", "emulation"); //устанавливаем дефолтное значение
 
-        if (emulationConfig.deviceHost() == "emulation") {
+        /*if (browserstackConfig.deviceHost() == "browserstack") {
+            Configuration.browser = BrowserstackMobileDriver.class.getName();
+        } else {
             Configuration.browser = EmulationDriver.class.getName();
+        }*/
+
+        if (Objects.equals("deviceHost", "emulation")) {
+            Configuration.browser = EmulationDriver.class.getName();
+        } else {
+            Configuration.browser = BrowserstackMobileDriver.class.getName();
         }
 
         Configuration.browserSize = null;
     }
+
 
     @BeforeEach
     public void startDriver() {
@@ -44,6 +53,7 @@ public class TestBase {
 
     @AfterEach
     public void afterEach() {
+        String deviceHost = System.getProperty("deviceHost", "emulation");
         String sessionId = sessionId();
 
         Attach.screenshotAs("Last screenshot");
@@ -51,6 +61,9 @@ public class TestBase {
 
         step("Close driver", Selenide::closeWebDriver);
 
-        Attach.video(sessionId);
+        if (Objects.equals("deviceHost", "browserstack")) {
+            Attach.video(sessionId);
+        }
+
     }
 }
