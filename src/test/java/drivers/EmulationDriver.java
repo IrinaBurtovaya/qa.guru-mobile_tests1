@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 public class EmulationDriver implements WebDriverProvider {

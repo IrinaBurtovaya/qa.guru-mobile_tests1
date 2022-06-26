@@ -26,13 +26,7 @@ public class TestBase {
     @BeforeAll
     public static void setup() {
 
-        String deviceHost = System.getProperty("deviceHost", "emulation"); //устанавливаем дефолтное значение
-
-        /*if (browserstackConfig.deviceHost() == "browserstack") {
-            Configuration.browser = BrowserstackMobileDriver.class.getName();
-        } else {
-            Configuration.browser = EmulationDriver.class.getName();
-        }*/
+        String deviceHost = System.getProperty("deviceHost", "browserstack"); //устанавливаем дефолтное значение
 
         if (Objects.equals("deviceHost", "emulation")) {
             Configuration.browser = EmulationDriver.class.getName();
